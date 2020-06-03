@@ -7,6 +7,14 @@ export default class ContactDetail extends Component {
     this.state = props.selectedContact;
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedContact.id !== prevProps.selectedContact.id) {
+      this.setState({
+        ...this.props.selectedContact,
+      });
+    }
+  }
+
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({
@@ -19,6 +27,8 @@ export default class ContactDetail extends Component {
   };
 
   render() {
+    console.log(this.state);
+
     const { name, username, id } = this.state;
     return (
       <div className="detail">
