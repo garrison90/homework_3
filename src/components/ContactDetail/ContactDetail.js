@@ -7,10 +7,6 @@ export default class ContactDetail extends Component {
     this.state = props.selectedContact;
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(nextProps.selectedContact);
-  }
-
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({

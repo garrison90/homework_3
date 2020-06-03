@@ -26,7 +26,7 @@ export default class Contacts extends Component {
 
   selectContact = (id) => {
     this.setState({
-      selectedContact: this.state.contacts.find((contact) => contact.id == id),
+      selectedContact: this.state.contacts.find((contact) => contact.id === id),
     });
   };
 
@@ -166,11 +166,4 @@ export default class Contacts extends Component {
       </div>
     );
   }
-}
-
-{
-  /* { id: 1, name: "Leanne Graham", username: "Bret" },
-      { id: 2, name: "Ervin Howell", username: "Antonette" },
-      { id: 3, name: "Clementine Bauch", username: "Samantha" },
-      { id: 4, name: "Patricia Lebsack", username: "Karianne" }, */
 }
