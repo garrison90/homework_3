@@ -17,7 +17,7 @@ export default class Contacts extends Component {
     this.getContacts();
   }
 
-  resetSelecteContact = () => {
+  resetSelectedContact = () => {
     this.setState({
       selectedContact: {
         id: "",
@@ -48,11 +48,11 @@ export default class Contacts extends Component {
       console.log(error);
     }
     this.getContacts();
-    this.resetSelecteContact();
+    this.resetSelectedContact();
   };
 
   newContact = () => {
-    this.resetSelecteContact();
+    this.resetSelectedContact();
   };
 
   addContact = async (newContact) => {
@@ -68,10 +68,8 @@ export default class Contacts extends Component {
     } catch (error) {
       console.log(error);
     }
-
     this.getContacts();
-
-    this.resetSelecteContact();
+    this.resetSelectedContact();
   };
 
   updateContact = async (updatedContact) => {
@@ -89,7 +87,7 @@ export default class Contacts extends Component {
     } catch (error) {
       console.log(error);
     }
-    this.resetSelecteContact();
+    this.resetSelectedContact();
     this.getContacts();
   };
 
