@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ContactItem from "../ContactItem/ContactItem";
 import "./Contacts.css";
 import ContactDetail from "../ContactDetail/ContactDetail";
-import NewContact from "../NewContact/NewContact";
 
 export default class Contacts extends Component {
   state = {
@@ -18,6 +17,16 @@ export default class Contacts extends Component {
     this.getContacts();
   }
 
+  resetSelecteContact = () => {
+    this.setState({
+      selectedContact: {
+        id: "",
+        name: "",
+        username: "",
+      },
+    });
+  };
+
   getContacts = () => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
@@ -30,47 +39,26 @@ export default class Contacts extends Component {
     });
   };
 
-  deleteContact = (contactId) => {
+  deleteContact = async (contactId) => {
     try {
-      fetch(`https://jsonplaceholder.typicode.com/users/${contactId}`, {
+      await fetch(`https://jsonplaceholder.typicode.com/users/${contactId}`, {
         method: "DELETE",
       });
     } catch (error) {
       console.log(error);
     }
     this.getContacts();
-    this.setState({
-      selectedContact: {
-        id: "",
-        name: "",
-        username: "",
-      },
-    });
-
-    //this.setState({
-    //  contacts: this.state.contacts.filter(({ id }) => id !== contactId),
-    //  selectedContact: {
-    //    id: "",
-    //    name: "",
-    //    username: "",
-    //  },
-    //});
+    this.resetSelecteContact();
   };
 
   newContact = () => {
-    this.setState({
-      selectedContact: {
-        id: "",
-        name: "",
-        username: "",
-      },
-    });
+    this.resetSelecteContact();
   };
 
-  addContact = (newContact) => {
+  addContact = async (newContact) => {
     newContact.id = Date.now();
     try {
-      fetch("https://jsonplaceholder.typicode.com/users", {
+      await fetch("https://jsonplaceholder.typicode.com/users", {
         method: "POST",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -83,51 +71,26 @@ export default class Contacts extends Component {
 
     this.getContacts();
 
-    //this.setState({
-    //  contacts: [...this.state.contacts, newContact],
-    //});
+    this.resetSelecteContact();
   };
 
-  updateContact = (updatedContact) => {
+  updateContact = async (updatedContact) => {
     try {
-      fetch(`https://jsonplaceholder.typicode.com/users/${updatedContact.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify(updatedContact),
-      })
-        .then((response) => response.json())
-        .then((json) => console.log(json));
+      await fetch(
+        `https://jsonplaceholder.typicode.com/users/${updatedContact.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify(updatedContact),
+        }
+      );
     } catch (error) {
       console.log(error);
     }
-
-    this.setState({
-      selectedContact: {
-        id: "",
-        name: "",
-        username: "",
-      },
-    });
-
+    this.resetSelecteContact();
     this.getContacts();
-
-    //const arr = [
-    //  ...this.state.contacts.filter(
-    //    (contact) => contact.id !== updatedContact.id
-    //  ),
-    //  updatedContact,
-    //].sort((a, b) => a.id - b.id);
-    //
-    //this.setState({
-    //  contacts: arr,
-    //  selectedContact: {
-    //    id: "",
-    //    name: "",
-    //    username: "",
-    //  },
-    //});
   };
 
   render() {
@@ -152,15 +115,12 @@ export default class Contacts extends Component {
                 New Contact
               </button>
             </div>
-            {this.state.selectedContact.id ? (
-              <ContactDetail
-                selectedContact={this.state.selectedContact}
-                updateContact={this.updateContact}
-                deleteContact={this.deleteContact}
-              />
-            ) : (
-              <NewContact addContact={this.addContact} />
-            )}
+            <ContactDetail
+              selectedContact={this.state.selectedContact}
+              updateContact={this.updateContact}
+              deleteContact={this.deleteContact}
+              addContact={this.addContact}
+            />
           </main>
         </div>
       </div>

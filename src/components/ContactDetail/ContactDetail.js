@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import "./ContactDetail.css";
 
 export default class ContactDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.state = props.selectedContact;
-  }
+  state = {
+    name: "",
+    username: "",
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedContact.id !== prevProps.selectedContact.id) {
@@ -26,14 +26,29 @@ export default class ContactDetail extends Component {
     this.props.updateContact(this.state);
   };
 
-  render() {
-    console.log(this.state);
+  cancelClick = () => {
+    this.setState({
+      name: "",
+      username: "",
+    });
+  };
 
+  addContact = () => {
+    this.props.addContact({ ...this.state });
+    this.setState({
+      name: "",
+      username: "",
+    });
+  };
+
+  render() {
     const { name, username, id } = this.state;
     return (
       <div className="detail">
         <div className="header">
-          <div className="body">Contact Details</div>
+          <div className="body">
+            {this.props.selectedContact.id ? "Contact Details" : "New Contact"}
+          </div>
         </div>
         <div>
           <div className="form-group">
@@ -57,17 +72,28 @@ export default class ContactDetail extends Component {
             />
           </div>
 
-          <div className="btn-block">
-            <button className="btn btn-update" onClick={this.updateContact}>
-              Update
-            </button>
-            <button
-              className="btn btn-delete"
-              onClick={this.props.deleteContact.bind(null, id)}
-            >
-              Delete
-            </button>
-          </div>
+          {this.props.selectedContact.id ? (
+            <div className="btn-block">
+              <button className="btn btn-update" onClick={this.updateContact}>
+                Update
+              </button>
+              <button
+                className="btn btn-delete"
+                onClick={this.props.deleteContact.bind(null, id)}
+              >
+                Delete
+              </button>
+            </div>
+          ) : (
+            <div className="btn-block">
+              <button className="btn btn-add" onClick={this.addContact}>
+                Add
+              </button>
+              <button className="btn btn-cancel" onClick={this.cancelClick}>
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
